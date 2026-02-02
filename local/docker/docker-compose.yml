@@ -1,0 +1,74 @@
+version: "3.9"
+
+services:
+  hardhat:
+    build: ./hardhat
+    command: ["npm", "run", "node"]
+    networks:
+      - mempool
+
+  tx-spammer:
+    build: ./hardhat
+    command: ["npm", "run", "spam"]
+    depends_on:
+      - hardhat
+    volumes:
+      - ../../data:/data
+    networks:
+      - mempool
+
+  indexer:
+    build: ../..
+    entrypoint: ["/app/indexer"]
+    command: ["index", "mempool", "--config", "/app/configs/config.docker.yaml", "--track"]
+    depends_on:
+      - hardhat
+    volumes:
+      - ../../configs:/app/configs
+      - ../../abis:/app/abis
+      - ../../data:/app/data
+    networks:
+      - mempool
+
+  indexer-logs:
+    build: ../..
+    entrypoint: ["/app/indexer"]
+    command: ["index", "follow", "--config", "/app/configs/config.docker.yaml"]
+    depends_on:
+      - hardhat
+    volumes:
+      - ../../configs:/app/configs
+      - ../../abis:/app/abis
+      - ../../data:/app/data
+    networks:
+      - mempool
+    profiles: ["logs"]
+
+  ui:
+    build: ../..
+    entrypoint: ["/app/ui"]
+    command: []
+    environment:
+      CONFIG_PATH: /app/configs/config.docker.yaml
+    depends_on:
+      - hardhat
+    volumes:
+      - ../../configs:/app/configs
+      - ../../abis:/app/abis
+      - ../../data:/app/data
+    networks:
+      - mempool
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: indexer
+      POSTGRES_PASSWORD: indexer
+      POSTGRES_DB: indexer
+    profiles: ["postgres"]
+    networks:
+      - mempool
+
+networks:
+  mempool:
+    driver: bridge

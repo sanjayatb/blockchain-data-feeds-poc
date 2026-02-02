@@ -1,0 +1,50 @@
+network: "local"
+
+networks:
+  local:
+    rpc_url: "http://127.0.0.1:8545"
+    chain_id: 31337
+  sepolia:
+    rpc_url: "https://ethereum-sepolia-rpc.publicnode.com"
+    chain_id: 11155111
+  mainnet:
+    rpc_url: "https://ethereum-rpc.publicnode.com"
+    chain_id: 1
+
+indexer:
+  start_block: 1
+  confirmations: 0
+  chunk_size: 200
+  min_chunk_size: 50
+  max_chunk_size: 500
+  concurrency: 1
+  rate_limit_per_second: 0
+  poll_interval_seconds: 10
+  metrics_interval_seconds: 30
+
+database:
+  driver: "sqlite"
+  dsn: "file:./data/indexer.db?_pragma=journal_mode(WAL)&_pragma=busy_timeout(5000)"
+
+mempool:
+  ws_url: "ws://127.0.0.1:8545"
+  http_url: "http://127.0.0.1:8545"
+  pending_workers: 32
+  receipt_workers: 16
+  dropped_ttl: "10m"
+  decode_input: false
+  track_lifecycle: true
+  max_inflight_hashes: 50000
+
+ui:
+  listen_addr: ":8080"
+  default_feed: "mempool"
+  poll_interval_seconds: 2
+  default_from: ""
+
+contracts:
+  - name: "ERC20"
+    address: "0x0000000000000000000000000000000000000000"
+    abi_path: "abis/erc20.json"
+    events:
+      - "Transfer"

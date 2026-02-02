@@ -1,0 +1,47 @@
+network: local
+networks:
+    local:
+        rpc_url: http://hardhat:8545
+        chain_id: 31337
+    mainnet:
+        rpc_url: https://ethereum-rpc.publicnode.com
+        chain_id: 1
+    sepolia:
+        rpc_url: https://ethereum-sepolia-rpc.publicnode.com
+        chain_id: 11155111
+chain:
+    rpc_url: ""
+    chain_id: 0
+indexer:
+    start_block: 1
+    confirmations: 0
+    chunk_size: 200
+    min_chunk_size: 50
+    max_chunk_size: 500
+    concurrency: 1
+    rate_limit_per_second: 0
+    poll_interval_seconds: 5
+    metrics_interval_seconds: 15
+database:
+    driver: sqlite
+    dsn: file:/app/data/indexer.db?_pragma=journal_mode(WAL)&_pragma=busy_timeout(5000)
+mempool:
+    ws_url: ws://hardhat:8545
+    http_url: http://hardhat:8545
+    pending_workers: 32
+    receipt_workers: 16
+    dropped_ttl: 10m0s
+    decode_input: false
+    track_lifecycle: true
+    max_inflight_hashes: 50000
+ui:
+    listen_addr: :8080
+    default_feed: mempool
+    poll_interval_seconds: 2
+    default_from: ""
+contracts:
+    - name: LocalERC20
+      address: 0x8e4417fc27caca1b4d23d492c97552817c53a5e9
+      abi_path: /app/abis/erc20.json
+      events:
+        - Transfer

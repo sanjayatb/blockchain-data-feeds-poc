@@ -1,0 +1,15 @@
+{
+  "name": "mempool-hardhat",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "node": "hardhat node --hostname 0.0.0.0 --port 8545",
+    "spam": "hardhat run --network local scripts/spam.js"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^3.0.5",
+    "ethers": "^6.11.1",
+    "hardhat": "^2.22.2"
+  }
+}

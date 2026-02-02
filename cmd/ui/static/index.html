@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mempool + Logs UI</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <h1>Blockchain Feeds UI</h1>
+        <p class="sub">Mempool and logs feed viewer with simple tx sender.</p>
+      </div>
+      <div class="controls">
+        <label>
+          Feed
+          <select id="feedSelect">
+            <option value="mempool">Mempool</option>
+            <option value="logs">Logs</option>
+          </select>
+        </label>
+        <label id="statusWrap">
+          Status
+          <select id="statusSelect">
+            <option value="all">All</option>
+            <option value="pending">Pending</option>
+            <option value="mined">Mined</option>
+            <option value="replaced">Replaced</option>
+            <option value="dropped">Dropped</option>
+          </select>
+        </label>
+        <label>
+          Limit
+          <input id="limitInput" type="number" value="100" min="10" max="1000" />
+        </label>
+        <button id="refreshBtn">Refresh</button>
+      </div>
+    </header>
+
+    <section class="grid">
+      <div class="card">
+        <h2>Send Transaction</h2>
+        <form id="txForm">
+          <label>
+            From
+            <select id="fromSelect"></select>
+          </label>
+          <label>
+            To
+            <input id="toInput" placeholder="0x... (optional if selecting below)" />
+            <select id="toSelect"></select>
+          </label>
+          <div class="row">
+            <label>
+              Value (wei)
+              <input id="valueInput" placeholder="1000000000000000" />
+            </label>
+            <label>
+              Gas Price (wei)
+              <input id="gasPriceInput" placeholder="1000000000" />
+            </label>
+          </div>
+          <div class="row">
+            <label>
+              Gas Limit
+              <input id="gasLimitInput" placeholder="21000" />
+            </label>
+            <label>
+              Nonce (optional)
+              <input id="nonceInput" placeholder="" />
+            </label>
+          </div>
+          <div class="row buttons">
+            <button type="submit">Send Tx</button>
+            <button type="button" id="mineBtn">Mine Block</button>
+          </div>
+          <div id="txResult" class="muted"></div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Token (logs feed)</h2>
+        <div class="row">
+          <label>
+            Latest token address
+            <input id="tokenAddress" placeholder="0x..." />
+          </label>
+          <div class="row buttons">
+            <button type="button" id="loadTokenBtn">Load Latest</button>
+            <button type="button" id="applyTokenBtn">Apply to Config</button>
+          </div>
+        </div>
+        <div id="tokenResult" class="muted"></div>
+      </div>
+
+      <div class="card feed-card">
+        <h2>Feed</h2>
+        <div class="table-wrap">
+          <table id="feedTable">
+            <thead id="feedHead"></thead>
+            <tbody id="feedBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
